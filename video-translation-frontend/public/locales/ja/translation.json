@@ -1,0 +1,37 @@
+{
+    "appTitle": "AIビデオ翻訳",
+    "auth": {
+      "clientCredentials": "クライアント認証情報",
+      "apiToken": "APIトークン",
+      "clientId": "クライアントID",
+      "enterClientId": "クライアントIDを入力してください",
+      "clientSecret": "クライアントシークレット",
+      "enterClientSecret": "クライアントシークレットを入力してください",
+      "getToken": "トークンを取得",
+      "fetchingToken": "トークンを取得中..."
+    },
+    "selectSourceLanguage": "翻訳元言語を選択",
+    "selectTargetLanguage": "翻訳先言語を選択",
+    "videoUrl": "ビデオURL",
+    "enterVideoUrl": "ビデオURLを入力してください",
+    "enableLipSync": "リップシンクを有効にする",
+    "translate": "翻訳",
+    "translating": "翻訳中...",
+    "downloadVideo": "ビデオをダウンロード",
+    "translateAnother": "別のビデオを翻訳",
+    "processing": {
+      "title": "ビデオ処理中",
+      "message": "ビデオを処理中です。お待ちください"
+    },
+    "errors": {
+      "invalidInput": "有効なビデオURL、翻訳元言語、翻訳先言語を選択してください",
+      "fetchError": "言語の取得中にエラーが発生しました",
+      "translationError": "ビデオの翻訳中にエラーが発生しました",
+      "tokenError": "クライアントIDとクライアントシークレットを両方入力してください",
+      "apiError": "APIエラー"
+    },
+    "buttons": {
+      "submitToken": "トークンを送信",
+      "ok": "OK"
+    }
+  }

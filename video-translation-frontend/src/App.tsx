@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
 import {io, Socket} from 'socket.io-client'
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from './components/LanguageSelector';
+import './i18n';
 
 interface Language {
   lang_code: string;
@@ -32,6 +35,7 @@ const App: React.FC = () => {
   const [authMethod, setAuthMethod] = useState<'credentials' | 'token'>('token');
   const [activeTab, setActiveTab] = useState<'input' | 'generate'>('input');
   const [tempToken, setTempToken] = useState<string>('');
+  const { t } = useTranslation();
   
 
 
@@ -111,7 +115,7 @@ const App: React.FC = () => {
 
   const handleTranslate = async () => {
     if (!videoUrl || !sourceLanguage || !targetLanguage) {
-      setError('Please provide a valid video URL, select a source language and target language.');
+      setError(t('errors.invalidInput'));
       return;
     }
   
@@ -215,7 +219,7 @@ const App: React.FC = () => {
 
   const fetchToken = async () => {
     if (!clientId || !clientSecret) {
-      setError('Please provide both Client ID and Client Secret');
+      setError(t('errors.tokenError'));
       return;
     }
 
@@ -277,8 +281,9 @@ const App: React.FC = () => {
       <header className="app-header">
         <div className="logo">
           <img src="/images/4p6vr8j7vbom4axo7k0 2.png" alt="AI Video Translator Logo" className="logo-img" />
-          <h1>AI Video Translator</h1>
+          <h1>{t('appTitle')}</h1>
         </div>
+        <LanguageSelector />
       </header>
       <main>
         {!apiToken && (
@@ -288,13 +293,13 @@ const App: React.FC = () => {
                 className={`auth-tab ${authMethod === 'credentials' ? 'active' : ''}`}
                 onClick={() => setAuthMethod('credentials')}
               >
-                Client Credentials
+                {t('auth.clientCredentials')}
               </button>
               <button 
                 className={`auth-tab ${authMethod === 'token' ? 'active' : ''}`}
                 onClick={() => setAuthMethod('token')}
               >
-                API Token
+                {t('auth.apiToken')}
               </button>
             </div>
 
@@ -302,19 +307,19 @@ const App: React.FC = () => {
               {authMethod === 'credentials' && (
                 <div className="credentials-form">
                   <div className="input-group">
-                    <label>Client ID</label>
+                    <label>{t('auth.clientId')}</label>
                     <input
                       type="text"
-                      placeholder="Enter your Client ID"
+                      placeholder={t('auth.enterClientId')}
                       value={clientId}
                       onChange={(e) => setClientId(e.target.value)}
                     />
                   </div>
                   <div className="input-group">
-                    <label>Client Secret</label>
+                    <label>{t('auth.clientSecret')}</label>
                     <input
                       type="password"
-                      placeholder="Enter your Client Secret"
+                      placeholder={t('auth.enterClientSecret')}
                       value={clientSecret}
                       onChange={(e) => setClientSecret(e.target.value)}
                     />
@@ -327,10 +332,10 @@ const App: React.FC = () => {
                     {isTokenLoading ? (
                       <>
                         <div className="spinner"></div>
-                        <span>Fetching Token...</span>
+                        <span>{t('auth.fetchingToken')}</span>
                       </>
                     ) : (
-                      'Get Token'
+                      t('auth.getToken')
                     )}
                   </button>
                 </div>
@@ -339,10 +344,10 @@ const App: React.FC = () => {
               {authMethod === 'token' && (
                 <div className="token-form">
                   <div className="input-group">
-                    <label>API Token</label>
+                    <label>{t('auth.apiToken')}</label>
                     <input
                       type="text"
-                      placeholder="Enter your API Token"
+                      placeholder={t('auth.enterClientId')}
                       value={tempToken}
                       onChange={(e) => setTempToken(e.target.value)}
                     />
@@ -354,13 +359,13 @@ const App: React.FC = () => {
                         setFetchingLanguages(true);
                         fetchLanguages();
                       } else {
-                        setError('Please enter an API token');
+                        setError(t('errors.tokenError'));
                       }
                     }}
                     className="auth-button"
                     disabled={!tempToken}
                   >
-                    Submit Token
+                    {t('buttons.submitToken')}
                   </button>
                 </div>
               )}
@@ -381,12 +386,24 @@ const App: React.FC = () => {
               <div className="loader"></div>
             ) : (
               <>
+                <div className="video-input">
+                  <label>
+                    {t('videoUrl')}:
+                    <input
+                      type="url"
+                      value={videoUrl}
+                      onChange={(e) => setVideoUrl(e.target.value)}
+                      placeholder={t('enterVideoUrl')}
+                    />
+                  </label>
+                </div>
+
                 <div className="language-selector">
                   <select
                     value={sourceLanguage || ''}
                     onChange={(e) => setSourceLanguage(e.target.value)}
                   >
-                    <option value="">Select Source Language</option>
+                    <option value="">{t('selectSourceLanguage')}</option>
                     {languages.map((language) => (
                       <option key={language.lang_code} value={language.lang_code}>
                         {language.lang_name}
@@ -398,7 +415,7 @@ const App: React.FC = () => {
                     value={targetLanguage || ''}
                     onChange={(e) => setTargetLanguage(e.target.value)}
                   >
-                    <option value="">Select Target Language</option>
+                    <option value="">{t('selectTargetLanguage')}</option>
                     {languages.map((language) => (
                       <option key={language.lang_code} value={language.lang_code}>
                         {language.lang_name}
@@ -407,47 +424,16 @@ const App: React.FC = () => {
                   </select>
                 </div>
 
-                <div className="video-input">
-                  <label>
-                    Video URL:
-                    <input
-                      type="url"
-                      value={videoUrl}
-                      onChange={(e) => setVideoUrl(e.target.value)}
-                      placeholder="Enter video URL"
-                    />
-                  </label>
-                </div>
-
-                <div className="checkboxes">
-                  <label className="lip-sync-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={lipSync}
-                      onChange={() => setLipSync(!lipSync)}
-                    />
-                    <span className="checkbox-text">
-                      <i className="fas fa-magic"></i> Enable Lip Sync
-                    </span>
-                  </label>
-                </div>
-
                 <div className="translate-button-container">
                   <button
                     onClick={handleTranslate}
                     disabled={isTranslateButtonDisabled}
                     className="translate-btn"
                   >
-                    {isTranslating ? 'Translating...' : 'Translate'}
+                    {isTranslating ? t('translating') : t('translate')}
                   </button>
                 </div>
 
-                {/* <button onClick={async ()=>{
-                  const d = await fetch('http://localhost:3007/test-app').then(r=>r.json())
-                  console.log("Data",d)
-                }}>
-                  Test Socket Event
-                </button> */}
                 {error && <div className="error-message">{error}</div>}
                 {translationResult}
               </>
@@ -465,13 +451,13 @@ const App: React.FC = () => {
                 className="action-btn download-btn"
                 onClick={handleDownload}
               >
-                Download Video
+                {t('downloadVideo')}
               </button>
               <button 
                 className="action-btn translate-another-btn"
                 onClick={handleTranslateAnother}
               >
-                Translate Another
+                {t('translateAnother')}
               </button>
             </div>
           </div>
@@ -480,7 +466,7 @@ const App: React.FC = () => {
         {showProcessingPopup && (
           <div className="processing-popup-overlay">
             <div className="processing-popup">
-              <p>Your video is being processed. Thank you for your patience</p>
+              <p>{t('processing.message')}</p>
               <div className="loader"></div>
             </div>
           </div>
@@ -490,7 +476,7 @@ const App: React.FC = () => {
           <div className="processing-popup-overlay">
             <div className="processing-popup error">
               <p>{errorMessage}</p>
-              <button onClick={handleErrorPopupClose}>OK</button>
+              <button onClick={handleErrorPopupClose}>{t('buttons.ok')}</button>
             </div>
           </div>
         )}

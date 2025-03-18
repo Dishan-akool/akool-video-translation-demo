@@ -1,0 +1,37 @@
+{
+  "appTitle": "AI Video Translator",
+  "auth": {
+    "clientCredentials": "Client Credentials",
+    "apiToken": "API Token",
+    "clientId": "Client ID",
+    "enterClientId": "Enter your Client ID",
+    "clientSecret": "Client Secret",
+    "enterClientSecret": "Enter your Client Secret",
+    "getToken": "Get Token",
+    "fetchingToken": "Fetching Token..."
+  },
+  "selectSourceLanguage": "Select Source Language",
+  "selectTargetLanguage": "Select Target Language",
+  "videoUrl": "Video URL",
+  "enterVideoUrl": "Enter video URL",
+  "enableLipSync": "Enable Lip Sync",
+  "translate": "Translate",
+  "translating": "Translating...",
+  "downloadVideo": "Download Video",
+  "translateAnother": "Translate Another",
+  "processing": {
+    "title": "Processing Video",
+    "message": "Your video is being processed. Thank you for your patience"
+  },
+  "errors": {
+    "invalidInput": "Please provide a valid video URL, select a source language and target language.",
+    "fetchError": "An error occurred while fetching languages.",
+    "translationError": "An error occurred while translating the video.",
+    "tokenError": "Please provide both Client ID and Client Secret",
+    "apiError": "API Error"
+  },
+  "buttons": {
+    "submitToken": "Submit Token",
+    "ok": "OK"
+  }
+}
